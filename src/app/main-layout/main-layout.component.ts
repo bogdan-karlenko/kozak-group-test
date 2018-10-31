@@ -18,24 +18,6 @@ export class MainLayoutComponent implements OnInit {
   page = 1;
 
   employees: IEmployee[] = [];
-  // [{
-  //   name: 'Patrick',
-  //   birthDate: new Date(),
-  //   occupation: 'carpenter',
-  //   salary: 1700
-  // },
-  // {
-  //   name: 'Joshua',
-  //   birthDate: new Date(),
-  //   occupation: 'fisherman',
-  //   salary: 950
-  // },
-  // {
-  //   name: 'Justine',
-  //   birthDate: new Date(),
-  //   occupation: 'doctor',
-  //   salary: 2900
-  // }];
 
   constructor(
     private modalService: NgbModal,
