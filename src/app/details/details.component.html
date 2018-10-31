@@ -1,0 +1,72 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between">
+    <h3>{{(employee ? 'edit' : 'create') | translate}}</h3>
+<button class="btn btn-light">
+    <i class="fas fa-times float-right" (click)="closeModal()"></i>
+    </button>
+  </div>
+  <div class="card-body row">
+    <div class="col-sm-10 offset-sm-1">
+
+      <div class="mb-3 row">
+        <div class="col-sm-4">
+          <p class="float-right">{{'name' | translate}}</p>
+        </div>
+        <div class="col-sm-7">
+          <div class="input-group">
+            <input [(ngModel)]="currentEmployee.name" class="form-control" appPattern [allowNumbers]="false">
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <div class="col-sm-4">
+          <p class="float-right">{{'birthDate' | translate}}</p>
+        </div>
+        <div class="col-sm-7">
+          <div class="input-group">
+            <input [value]="currentEmployee.birthDate|date:'shortDate'"
+            class="form-control"
+            ngbDatepicker
+            #d="ngbDatepicker"
+            (dateSelect)="onDateSelect($event)"
+            readonly>
+            <div class="input-group-append">
+              <button class="btn kgt-append-button" (click)="d.toggle()">
+                <i class="fas fa-calendar-alt"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <div class="col-sm-4">
+          <p class="float-right">{{'occupation' | translate}}</p>
+        </div>
+        <div class="col-sm-7">
+          <div class="input-group">
+            <input [(ngModel)]="currentEmployee.occupation" class="form-control" appPattern [allowNumbers]="false">
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <div class="col-sm-4">
+          <p class="float-right">{{'salary' | translate}}
+          </p>
+        </div>
+        <div class="col-sm-7">
+          <div class="input-group">
+            <input [(ngModel)]="currentEmployee.salary" class="form-control" appPattern [allowNumbers]="true">
+            <div class="input-group-append">
+              <button class="btn kgt-append-button">$</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<a class="btn btn-outline-dark m-3 float-right" (click)="saveEmployee()">{{'save' | translate}}</a>

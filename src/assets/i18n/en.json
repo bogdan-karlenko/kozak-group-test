@@ -1,0 +1,11 @@
+{
+    "name": "Name",
+    "birthDate": "Birth Date",
+    "occupation": "Occupation",
+    "salary": "Salary",
+    "addNew": "Add new employee",
+    "create": "Create",
+    "edit" : "Edit",
+    "save": "Save",
+    "lang": "Language"
+}
