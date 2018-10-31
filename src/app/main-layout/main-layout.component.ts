@@ -1,7 +1,9 @@
+import { DataService } from './../services/data.service';
 import { Component, OnInit } from '@angular/core';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import 'rxjs/add/operator/switchMap';
 
 import { IEmployee } from './../core/interfaces';
 import { DetailsComponent } from './../details/details.component';
@@ -15,70 +17,71 @@ export class MainLayoutComponent implements OnInit {
 
   page = 1;
 
-  employees: IEmployee[] = [{
-    id: (+(Date.now()) + 1).toString(),
-    name: 'Patrick',
-    birthDate: new Date(),
-    occupation: 'carpenter',
-    salary: 1700
-  },
-  {
-    id: (+(Date.now()) - 1).toString(),
-    name: 'Joshua',
-    birthDate: new Date(),
-    occupation: 'fisherman',
-    salary: 950
-  },
-  {
-    id: (+(Date.now())).toString(),
-    name: 'Justine',
-    birthDate: new Date(),
-    occupation: 'doctor',
-    salary: 2900
-  }
-  ];
-  constructor(private modalService: NgbModal,
-    public translateService: TranslateService) {
+  employees: IEmployee[] = [];
+  // [{
+  //   name: 'Patrick',
+  //   birthDate: new Date(),
+  //   occupation: 'carpenter',
+  //   salary: 1700
+  // },
+  // {
+  //   name: 'Joshua',
+  //   birthDate: new Date(),
+  //   occupation: 'fisherman',
+  //   salary: 950
+  // },
+  // {
+  //   name: 'Justine',
+  //   birthDate: new Date(),
+  //   occupation: 'doctor',
+  //   salary: 2900
+  // }];
+
+  constructor(
+    private modalService: NgbModal,
+    public translateService: TranslateService,
+    private dataService: DataService
+  ) {
     translateService.setDefaultLang('en');
     translateService.use('en');
   }
 
   ngOnInit() {
-    const employees = localStorage.getItem('employees');
-    if (employees) {
-      this.employees = JSON.parse(employees);
-    }
+    this.dataService.getEmployees()
+      .subscribe(
+        employees => {
+          this.employees = employees;
+        },
+        err => console.log(err));
   }
 
   deleteEmployee(id: string) {
-    this.employees.splice(this.employees.findIndex(employee => employee.id === id), 1);
-    this.storeEmployees();
+    this.dataService.deleteEmployee(id)
+      .subscribe(_ => {
+        this.employees.splice(this.employees.findIndex(employee => employee.id === id), 1);
+      },
+        err => console.log(err));
   }
 
   editEmployee(id: string) {
     const modalRef = this.modalService.open(DetailsComponent);
     modalRef.componentInstance.employee = this.employees.find(employee => employee.id === id);
     modalRef.componentInstance.changes
-      .subscribe(_ => {
-        this.storeEmployees();
-      });
+      .switchMap(employee => this.dataService.editEmployee(employee))
+      .switchMap(_ => this.dataService.getEmployees())
+      .subscribe(employees => {
+        this.employees = employees;
+      },
+        err => console.log(err));
   }
 
   createEmployee() {
     const modalRef = this.modalService.open(DetailsComponent);
     modalRef.componentInstance.changes
+      .switchMap(employee => this.dataService.createEmployee(employee))
       .subscribe(employee => {
-        this.employees.push(
-          {
-            id: (+(Date.now())).toString(),
-            ...employee
-          });
-        this.storeEmployees();
+        this.employees.push(employee);
       });
-  }
-
-  storeEmployees() {
-    localStorage.setItem('employees', JSON.stringify(this.employees));
   }
 
   changeLang() {

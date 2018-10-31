@@ -8,11 +8,11 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxPaginationModule } from 'ngx-pagination';
 
-
 import { AppComponent } from './app.component';
 import { PatternDirective } from './core/pattern.directive';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { DetailsComponent } from './details/details.component';
+import { DataService } from './services/data.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -40,7 +40,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgbModalModule,
     NgxPaginationModule
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent],
   entryComponents: [DetailsComponent]
 })

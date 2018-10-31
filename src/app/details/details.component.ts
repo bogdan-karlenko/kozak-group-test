@@ -27,15 +27,7 @@ export class DetailsComponent implements OnInit {
   }
 
   saveEmployee() {
-    if (this.employee) {
-      Object.keys(this.employee)
-        .forEach(key => {
-          this.employee[key] = this.currentEmployee[key];
-        });
-      this.changes.emit();
-    } else {
-      this.changes.emit(this.currentEmployee);
-    }
+    this.changes.emit(this.currentEmployee);
     this.activeModal.close();
   }
 
